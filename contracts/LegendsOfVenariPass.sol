@@ -103,6 +103,20 @@ contract LegendsOfVenariPass is
     return _isSaleActive;
   }
 
+  // @dev Returns the mint count of a specific faction
+  function getMintCount(uint256 factionId) external view returns (uint256) {
+    require(_isValidFactionId(factionId), "Faction is not valid");
+
+    if (factionId == TALAW_ID) {
+      return talawMintCount;
+    } else if (factionId == VESTAL_ID) {
+      return vestalMintCount;
+    } else if (factionId == AZULE_ID) {
+      return azuleMintCount;
+    }
+    return 0;
+  }
+
   // @dev Allows to set the baseURI dynamically
   // @param uri The base uri for the metadata store
   function setBaseURI(string memory uri) external onlyOwner {
