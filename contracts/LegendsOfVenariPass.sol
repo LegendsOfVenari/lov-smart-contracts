@@ -39,11 +39,11 @@ contract LegendsOfVenariPass is
 
   // Minting constants
   uint256 public maxMintPerTransaction;
-  uint256 public MINT_SUPPLY;
-  uint256 public TEAM_SUPPLY;
+  uint256 public MINT_SUPPLY_PER_FACTION;
+  uint256 public TEAM_SUPPLY_PER_FACTION;
 
   // 0.188 ETH
-  uint256 public constant MINT_PRICE = 188000000000000000;
+  uint256 public constant MINT_PRICE = 18800000000000000;
 
   // Keep track of supply
   uint256 public talawMintCount = 0;
@@ -64,11 +64,10 @@ contract LegendsOfVenariPass is
   // Base URI
   string private _uri;
 
-  // Last Token Id
-  uint256 lastTokenId = 0;
-
   // Merkle Root
   bytes32 immutable public root;
+
+  uint256 lastTokenId = 0;
 
   constructor(
     uint256 mintSupply,
@@ -76,8 +75,8 @@ contract LegendsOfVenariPass is
     uint256 maxMint,
     bytes32 merkleroot
   ) ERC721("Legends of Venari Pass", "LVP") {
-    MINT_SUPPLY = mintSupply;
-    TEAM_SUPPLY = teamSupply;
+    MINT_SUPPLY_PER_FACTION = mintSupply;
+    TEAM_SUPPLY_PER_FACTION = teamSupply;
     maxMintPerTransaction = maxMint;
     root = merkleroot;
   }
@@ -135,12 +134,11 @@ contract LegendsOfVenariPass is
 
   // Presale
   function presaleMint(
-    address account,
     uint256 tokenId,
     bytes32[] calldata proof,
     uint256 factionId
   ) external payable {
-    require(_verify(_leaf(account, tokenId), proof), "Invalid merkle proof");
+    require(_verify(_leaf(msg.sender, tokenId), proof), "Invalid merkle proof");
     require(!presaleClaimed[msg.sender], "Already claimed with this address");
     require(_isPresaleActive, "Presale not active");
     require(!_isSaleActive, "Cannot mint while main sale is active");
@@ -148,7 +146,7 @@ contract LegendsOfVenariPass is
     require(MINT_PRICE == msg.value, "ETH sent does not match required payment");
     presaleClaimed[msg.sender] = true;
 
-    _handleFactionMint(1, factionId, msg.sender, MINT_SUPPLY);
+    _handleFactionMint(1, factionId, msg.sender, MINT_SUPPLY_PER_FACTION);
   }
 
   function _leaf(address account, uint256 tokenId) internal pure returns (bytes32) {
@@ -198,7 +196,7 @@ contract LegendsOfVenariPass is
     for (uint256 i = 0; i < factionIds.length; i++) {
         uint256 factionId = factionIds[i];
         require(_isValidFactionId(factionId), "Faction is not valid");
-        _handleFactionMint(1, factionId, addresses[i], MINT_SUPPLY);
+        _handleFactionMint(1, factionId, addresses[i], MINT_SUPPLY_PER_FACTION);
     }
   }
 
@@ -219,7 +217,7 @@ contract LegendsOfVenariPass is
       "ETH sent does not match required payment"
     );
 
-      _handleFactionMint(tokenCount, factionId, msg.sender, MINT_SUPPLY);
+      _handleFactionMint(tokenCount, factionId, msg.sender, MINT_SUPPLY_PER_FACTION);
   }
 
   // @dev Private mint function reserved for company.
@@ -235,7 +233,7 @@ contract LegendsOfVenariPass is
     require(_isValidFactionId(factionId), "Faction does not exist");
     require(tokenCount > 0, "You can only mint more than 0 tokens");
 
-    _handleFactionMint(tokenCount, factionId, recipient, MINT_SUPPLY + TEAM_SUPPLY);
+    _handleFactionMint(tokenCount, factionId, recipient, MINT_SUPPLY_PER_FACTION + TEAM_SUPPLY_PER_FACTION);
   }
 
   function redeemBasePass(
@@ -338,12 +336,21 @@ contract LegendsOfVenariPass is
   ) private {
     for (uint256 i = 0; i < tokenCount; i++) {
       uint256 tokenId = lastTokenId + i;
-      factionForToken[tokenId] = factionId;
-      emit Mint(recipient, tokenId, factionId);
-      _safeMint(recipient, tokenId);
+      _mintWithTokenId(recipient, tokenId, factionId);
       lastTokenId++;
     }
   }
+
+  function _mintWithTokenId(
+    address recipient,
+    uint256 tokenId,
+    uint256 factionId
+  ) private {
+      factionForToken[tokenId] = factionId;
+      emit Mint(recipient, tokenId, factionId);
+      _safeMint(recipient, tokenId);
+  }
+
 
   function _isValidFactionId(uint256 factionId) private pure returns (bool) {
     return factionId == TALAW_ID || factionId == AZULE_ID || factionId == VESTAL_ID;
