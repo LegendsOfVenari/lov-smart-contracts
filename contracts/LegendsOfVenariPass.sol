@@ -144,7 +144,7 @@ contract LegendsOfVenariPass is
     require(!_isSaleActive, "Cannot mint while main sale is active");
     require(_isValidFactionId(factionId), "Faction is not valid");
     require(MINT_PRICE == msg.value, "ETH sent does not match required payment");
-    // presaleClaimed[msg.sender] = true; commented out for testing purposes
+    presaleClaimed[msg.sender] = true;
 
     _handleFactionMint(1, factionId, msg.sender, MINT_SUPPLY_PER_FACTION);
   }
@@ -337,8 +337,8 @@ contract LegendsOfVenariPass is
     for (uint256 i = 0; i < tokenCount; i++) {
       uint256 tokenId = lastTokenId + i;
       _mintWithTokenId(recipient, tokenId, factionId);
-      lastTokenId++;
     }
+    lastTokenId += tokenCount;
   }
 
   function _mintWithTokenId(
