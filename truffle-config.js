@@ -26,7 +26,7 @@ module.exports = {
           `https://mainnet.infura.io/v3/${process.env.INFURA_ID}`
         );
       },
-      gas: 2250000, // adjust per contract
+      gas: 4000000, // adjust per contract
       gasPrice: 120000000000, // 120 gwei
       network_id: 1,
     },

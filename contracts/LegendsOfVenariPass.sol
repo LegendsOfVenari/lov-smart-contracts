@@ -42,8 +42,8 @@ contract LegendsOfVenariPass is
   uint256 public MINT_SUPPLY_PER_FACTION;
   uint256 public TEAM_SUPPLY_PER_FACTION;
 
-  // 0.188 ETH
-  uint256 public constant MINT_PRICE = 18800000000000000;
+  // 0.001 ETH
+  uint256 public constant MINT_PRICE = 188000000000000000;
 
   // Keep track of supply
   uint256 public talawMintCount = 0;
@@ -59,7 +59,7 @@ contract LegendsOfVenariPass is
 
   // Presale
   mapping(address => bool) private presaleClaimed; // Everyone who got in on the presale can only claim once.
-  address private signVerifier = 0xd974C841FF9ad100a992555F4587CA61c838E6Aa;
+  address private signVerifier = 0xf79e8a0d24cF91EE36c8a7e7dB8Aa95fbF7d6a8f;
 
   // Base URI
   string private _uri;
@@ -160,7 +160,7 @@ contract LegendsOfVenariPass is
   mapping(uint256 => bool) partnerNonceUsed;
   mapping(address => uint256) basePassNonce;
 
-  // @dev Partner Mint - For partners on the whitelist who want to batch mint
+  // @dev Partner Mint - For partners who we allow to batch mint
   // @param factionIds The factions associated with the tokens
   // @param addresses The addresses that the tokens will be distributed to
   // @param sig Server side signature authorizing user to use the presale
@@ -202,7 +202,7 @@ contract LegendsOfVenariPass is
 
   // @dev Main sale mint
   // @param tokensCount The tokens a user wants to purchase
-  // @param factionId Talaw: 1, Vestal: 2, Azule: 3
+  // @param factionId Talaw: 0, Vestal: 1, Azule: 2
   function mint(uint256 tokenCount, uint256 factionId)
     external
     payable
@@ -221,19 +221,23 @@ contract LegendsOfVenariPass is
   }
 
   // @dev Private mint function reserved for company.
+  // THIS SHOULD ONLY BE DONE AFTER THE MAIN SALE HAS FINISHED
   // 50 of each faction is reserved.
   // @param recipient The user receiving the tokens
   // @param tokenCount The number of tokens to distribute
-  // @param factionId Community: 0 and Theos: 1
+  // @param factionId Talaw: 0, Vestal: 1, Azule: 2
   function mintToAddress(
-    address recipient,
-    uint256 tokenCount,
-    uint256 factionId
+    address[] memory addresses,
+    uint256[] memory factionIds
   ) external onlyOwner {
-    require(_isValidFactionId(factionId), "Faction does not exist");
-    require(tokenCount > 0, "You can only mint more than 0 tokens");
+    require(factionIds.length == addresses.length, "Faction ids much have the same length as addresses");
 
-    _handleFactionMint(tokenCount, factionId, recipient, MINT_SUPPLY_PER_FACTION + TEAM_SUPPLY_PER_FACTION);
+    // Mint
+    for (uint256 i = 0; i < factionIds.length; i++) {
+        uint256 factionId = factionIds[i];
+        require(_isValidFactionId(factionId), "Faction is not valid");
+        _handleFactionMint(1, factionId, addresses[i], MINT_SUPPLY_PER_FACTION + TEAM_SUPPLY_PER_FACTION);
+    }
   }
 
   function redeemBasePass(

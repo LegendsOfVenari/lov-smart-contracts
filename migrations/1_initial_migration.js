@@ -6,6 +6,6 @@ module.exports = async (deployer) => {
     1200,
     50,
     3,
-    "0xb5a8801b9e22b8aa25d30cd5d5ea7d2ec35cdafbb95e85b5cac5e227afeaeb88"
+    "0xdada09daeec41155d50d2d9904d0560d609a1363ca5453ca6893c1be3a9bd750"
   );
 };
