@@ -42,11 +42,8 @@ contract LegendsOfVenariAlphaPass is
   uint256 public MINT_SUPPLY_PER_FACTION;
   uint256 public TEAM_SUPPLY_PER_FACTION;
 
-  // 0.11 ETH
-  // 110000000000000000 GWEI
-
   // Current price: 0.0011
-  uint256 public constant MINT_PRICE = 1100000000000000;
+  uint256 public constant MINT_PRICE = 110000000000000000;
 
   // Keep track of supply
   uint256 public talawMintCount = 0;

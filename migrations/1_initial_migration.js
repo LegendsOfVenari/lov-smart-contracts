@@ -3,9 +3,9 @@ const LegendsOfVenariAlphaPass = artifacts.require("LegendsOfVenariAlphaPass");
 module.exports = async (deployer) => {
   await deployer.deploy(
     LegendsOfVenariAlphaPass,
-    900,
-    150,
+    950,
+    100,
     20,
-    "0xdada09daeec41155d50d2d9904d0560d609a1363ca5453ca6893c1be3a9bd750"
+    "0x1470cae2b60547e89b44b1c061b3a0c38b6ecdf7cbd3ffb194a925830eebde29"
   );
 };
