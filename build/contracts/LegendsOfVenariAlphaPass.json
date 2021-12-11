@@ -45075,12 +45075,12 @@
         }
       },
       "links": {},
-      "address": "0x0368C77F396Cb64a79681CaE1f443877950C86c5",
-      "transactionHash": "0xcb677932e6e1005df1debaea553ee728aebc48536bdba173f41ec6f8215a4b5d"
+      "address": "0xdE404146e5E91dA566c19A546E85cE8E74aD12BD",
+      "transactionHash": "0xb580e331da5ffd1180e1a96a04bc7ae77357018be15bbc48535188b9cc7a1321"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-12-11T19:27:08.113Z",
+  "updatedAt": "2021-12-11T19:54:56.774Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "This contract allows the distribution of Legends of Venari Passes in the form of a presale and main sale. Users can mint from Talaw, Vestal, or Azule in either sales. Smart contract work done by lenopix.eth",

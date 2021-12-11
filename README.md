@@ -38,7 +38,7 @@ truffle run verify ContractName --network rinkeby
 ## Latest Contract Deployments
 
 ### Rinkeby
-https://rinkeby.etherscan.io/address/0x38D91C1A150E9be694253b50440095b09d827496#code
+https://rinkeby.etherscan.io/address/0xdE404146e5E91dA566c19A546E85cE8E74aD12BD#code
 
 ### Prod
 https://etherscan.io/address/0x4e34eC528a663194f4dFE40641E8a3a98abb6e84#writeContract
